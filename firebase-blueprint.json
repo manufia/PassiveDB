@@ -1,0 +1,122 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Information and budget settings for an individual user.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "The user's unique identifier matching auth.uid",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address",
+          "maxLength": 128
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name",
+          "maxLength": 100
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL to user's profile avatar",
+          "maxLength": 500
+        },
+        "monthlyBudget": {
+          "type": "number",
+          "description": "Monthly budget limit in user currency"
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency code such as THB",
+          "maxLength": 10
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Account creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last update timestamp"
+        }
+      },
+      "required": ["uid", "email", "createdAt", "updatedAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Income or expense record created by a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique transaction ID",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID of the user who owns this transaction",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["income", "expense"],
+          "description": "Whether transaction is income or expense"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Transaction amount in monetary units"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category name for transaction",
+          "maxLength": 50
+        },
+        "title": {
+          "type": "string",
+          "description": "Brief description / title of the transaction",
+          "maxLength": 120
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional notes or details",
+          "maxLength": 300
+        },
+        "date": {
+          "type": "string",
+          "description": "Date of transaction formatted as YYYY-MM-DD",
+          "maxLength": 10
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Record creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Record update timestamp"
+        }
+      },
+      "required": ["id", "userId", "type", "amount", "category", "title", "date", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Stores individual user profile, settings and monthly budget limits"
+    },
+    "/transactions/{transactionId}": {
+      "schema": "Transaction",
+      "description": "Stores user income and expense records with category, amount and date"
+    }
+  }
+}
